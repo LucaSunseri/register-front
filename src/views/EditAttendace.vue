@@ -1,72 +1,70 @@
 <template>
-  <h1>Modifica Presenza</h1>
-   <form @submit.prevent="editAttendance">
+    <div class="container">
 
-        <div class="container">
+        <h1>Modifica Presenza</h1>
+
+        <form @submit.prevent="editAttendance">
+
+            <div class="container">
+                <div class="row mb-3">
+                    <div class="col">
+                        <input
+                            v-model="getAttendance.date"
+                            type="date"
+                            class="form-control"
+                        />
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="getAttendance.time_start_morning"
+                            type="time"
+                            class="form-control"
+                            placeholder="Inizio Mattina"
+                        />
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="getAttendance.time_end_morning"
+                            type="time"
+                            class="form-control"
+                            placeholder="Fine Mattina"
+                        />
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="getAttendance.time_start_afternoon"
+                            type="time"
+                            class="form-control"
+                            placeholder="Inizio Pomeriggio"
+                        />
+                    </div>
+                    <div class="col">
+                        <input
+                            v-model="getAttendance.time_end_afternoon"
+                            type="time"
+                            class="form-control"
+                            placeholder="Fine Pomeriggio"
+                        />
+                    </div>
+                </div>
+            </div>
+
             <div class="row mb-3">
                 <div class="col">
-                    <input
-                        v-model="getAttendance.date"
-                        type="date"
-                        class="form-control"
-                    />
-                </div>
-                <div class="col">
-                    <input
-                        v-model="getAttendance.time_start_morning"
-                        type="time"
-                        class="form-control"
-                        placeholder="Inizio Mattina"
-                    />
-                </div>
-                <div class="col">
-                    <input
-                        v-model="getAttendance.time_end_morning"
-                        type="time"
-                        class="form-control"
-                        placeholder="Fine Mattina"
-                    />
-                </div>
-                <div class="col">
-                    <input
-                        v-model="getAttendance.time_start_afternoon"
-                        type="time"
-                        class="form-control"
-                        placeholder="Inizio Pomeriggio"
-                    />
-                </div>
-                <div class="col">
-                    <input
-                        v-model="getAttendance.time_end_afternoon"
-                        type="time"
-                        class="form-control"
-                        placeholder="Fine Pomeriggio"
-                    />
+                    <select class="form-select" aria-label="Default select example" v-model="getAttendance.activity_id">
+                        <option v-for="activity in getActivities" :key="activity.id" :value="activity.id">{{activity.type}}</option>
+                    </select>
                 </div>
             </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col">
-                <input
-                    v-model="getAttendance.signature"
-                    type="text"
-                    class="form-control"
-                    placeholder="Firma"
-                />
-            </div>
-            <div class="col">
-                <select class="form-select" aria-label="Default select example" v-model="getAttendance.activity_id">
-                    <option v-for="activity in getActivities" :key="activity.id" :value="activity.id">{{activity.type}}</option>
-                </select>
-            </div>
-        </div>
 
 
-        <button class="w-20 btn btn-lg btn-primary" type="submit">
-            Submit
-        </button>
-    </form>
+            <button class="w-20 btn btn-lg btn-primary" type="submit">
+                Submit
+            </button>
+        </form>
+            
+    </div>
+  
 </template>
 
 <script>
@@ -100,7 +98,6 @@ export default {
                 time_end_morning: attendance.time_end_morning,
                 time_start_afternoon: attendance.time_start_afternoon,
                 time_end_afternoon: attendance.time_end_afternoon,
-                signature: attendance.signature,
                 activity_id: attendance.activity_id,
             };
             this.$store.dispatch('editAttendance', [this.id, payload])

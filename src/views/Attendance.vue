@@ -1,9 +1,6 @@
 <template>
     <div class="container">
         <h1>Presenze</h1>
-        <router-link to="/create-attendance" class="navbar-brand">
-            <button type="button" class="btn btn-primary">Aggiungi</button>
-        </router-link>
 
         <div class="row my-3">
             <div class="col-2">
@@ -21,6 +18,14 @@
             <div class="col-2">
                 <button type="button" class="btn btn-outline-info" @click="filterAttendace">Filtra</button>
             </div>
+            <div class="offset-4 col-1">
+                <button type="button" class="btn btn-warning" @click="ExportComponent = !ExportComponent">Esporta</button>
+            </div>
+            <div class="col-1">
+                <router-link :to="{ name: 'create-attendance'}" class="navbar-brand">
+                    <button type="button" class="btn btn-primary">Aggiungi</button>
+                </router-link>
+            </div>
         </div>
 
 
@@ -32,7 +37,6 @@
                     <th scope="col">Ora Mattina fine</th>
                     <th scope="col">Ora Pomeriggio inizio</th>
                     <th scope="col">Ora Pomeriggio fine</th>
-                    <th scope="col">Firma</th>
                     <th scope="col">Attività</th>
                     <th colspan="2" class="text-center">Azioni</th>
                 </tr>
@@ -44,7 +48,6 @@
                     <td>{{attendance.time_end_morning}}</td>
                     <td>{{attendance.time_start_afternoon}}</td>
                     <td>{{attendance.time_end_afternoon}}</td>
-                    <td>{{attendance.signature}}</td>
                     <td>{{attendance.activity_id}}</td>
                     <td>
                         <router-link :to="{ name: 'edit-attendance', params: { id: attendance.id } }" class="navbar-brand">
@@ -58,15 +61,19 @@
             </tbody>
         </table>    
     </div>
-    
+    <Export v-if="ExportComponent"/>    
 </template>
 
 <script>
 import { useStore } from "vuex";
 import { computed } from '@vue/runtime-core';
+import Export from '../components/Export.vue'
 
 export default {
     name: "Attendance",
+    components: {
+        Export,
+    },
     data() {
         return {
             months: [
@@ -86,6 +93,7 @@ export default {
             years: [],
             selectMonth: '',
             selectYear: '',
+            ExportComponent: false,
         };
     },
     setup () {
@@ -112,8 +120,6 @@ export default {
                 month : this.selectMonth,
                 year : this.selectYear
             }
-            let month = this.selectMonth;
-            let year = this.selectYear;
             this.$store.dispatch('getAttendance', payload);
         }
     }

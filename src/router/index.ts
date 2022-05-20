@@ -11,32 +11,56 @@ const routes: Array<RouteRecordRaw> =[
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: { 
+      requiresAuth: false,
+      isLoggedInSkip: false  
+    }
   },
   {
     path: '/attendance',
     name: 'attendance',
-    component: Attendance
+    component: Attendance,
+    meta: { 
+      requiresAuth: true,
+      isLoggedInSkip: false  
+    }
   },
   {
-    path: '/create-attendance',
+    path: '/attendance/create',
     name: 'create-attendance',
-    component: NewAttendance
+    component: NewAttendance,
+    meta: { 
+      requiresAuth: true,
+      isLoggedInSkip: false  
+    }
   },
   {
     path: '/attendance/edit/:id',
     name: 'edit-attendance',
     component: EditAttendace,
+    meta: { 
+      requiresAuth: true,
+      isLoggedInSkip: false  
+    }
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: { 
+      requiresAuth: false,
+      isLoggedInSkip: true  
+    }
   },
   {
     path: '/register',
     name: 'register',
-    component: Register
+    component: Register,
+    meta: { 
+      requiresAuth: false,
+      isLoggedInSkip: true 
+    }
   }
 ]
 
@@ -46,11 +70,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/'];
-  const authRequired = !publicPages.includes(to.path);
   const loggedIn = store.getters.getUser;
-  if (authRequired && !loggedIn) {
-    next('/login');
+  if (to.meta.requiresAuth && !loggedIn) {
+    next({ name: 'login' })
+    
+  } else if(loggedIn) {
+    store.dispatch('checkSignature');
+    if(to.meta.isLoggedInSkip) {
+      next({ name: 'home' });
+    }
+    next();
   } else {
     next();
   }

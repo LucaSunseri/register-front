@@ -1,10 +1,12 @@
 <template>
-    <h1>Home</h1>
-    <ul v-if="getUser">
-        <li>{{getUser.name}}</li>
-        <li>{{getUser.surname}}</li>
-        <li>{{getUser.token}}</li>
-    </ul>
+    <div class="container">
+        <h1>Home</h1>
+        <ul v-if="getUser">
+            <li>{{getUser.name}}</li>
+            <li>{{getUser.surname}}</li>
+            <li>{{getUser.token}}</li>
+        </ul> 
+    </div>
 </template>
 
 <script>
@@ -21,11 +23,14 @@ export default {
         const store = useStore();
         return {
             getUser: computed(() => store.getters.getUser),
+            getCheckSignature: computed(() => store.getters.getCheckSignature),
         }
     },
     computed: {
     },
-    mounted() {},
-    methods: {},
+    mounted() {
+    },
+    methods: {
+    },
 };
 </script>

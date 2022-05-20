@@ -10,6 +10,7 @@ export default createStore({
     attendances: null,
     attendance: {},
     activities: null,
+    checkSignature: null,
   },
 
   getters: {
@@ -34,7 +35,11 @@ export default createStore({
     getActivities (state) {
       return state.activities;
     },
-    
+
+    getCheckSignature (state) {
+      return state.checkSignature;
+    },
+  
   },
 
 	mutations: {
@@ -55,11 +60,16 @@ export default createStore({
     setActivities(state, activities) {
       state.activities = activities;
     },
+
+    setCheckSignature(state, checkSignature) {
+      state.checkSignature = checkSignature;
+    },
+
 	},
 
   actions: {
 
-    login({commit}, payload) {
+    login({commit, dispatch}, payload) {
       return axios
       .post(API_URL + 'login', payload)
       .then(function (response) {
@@ -79,12 +89,11 @@ export default createStore({
         }
       })
       .then(function (response) {
-        console.log(response);
         commit('setUser', null);
-        return Promise.resolve;
+        return Promise.resolve(response);
       })
       .catch(function (error) {
-        console.log(error);
+        return Promise.reject(error);
       });
     },
 
@@ -177,6 +186,59 @@ export default createStore({
       .get( API_URL + 'activity')
       .then(function (response) {
         commit('setActivities', response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+
+    checkSignature({getters, commit}) {
+      return axios
+      .get( API_URL + 'signature/check', {
+        headers: {
+          'Authorization': `Bearer ${getters.getUser.token}`
+        }
+      })
+      .then(function (response) {
+        commit('setCheckSignature', response.data);
+      })
+      .catch(function (error) {
+        return Promise.reject(error);
+      });
+    },
+
+    saveSignature({getters, commit}, payload) {
+      axios
+      .post( API_URL + 'signature/save', payload, {
+        headers: {
+          'Authorization': `Bearer ${getters.getUser.token}`
+        }
+      })
+      .then(function (response) {
+        commit('setCheckSignature', true);
+        console.log(response.data); 
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+
+    exportWord({getters}, payload) {
+      axios
+      .post( API_URL + 'export/word', payload, {
+        headers: {
+          'Authorization': `Bearer ${getters.getUser.token}`
+        }, 
+        responseType: 'blob'
+      })
+      .then(function (response) {
+        debugger;
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'ciao.docx'); //or any other extension
+        document.body.appendChild(link);
+        link.click();
       })
       .catch(function (error) {
         console.log(error);

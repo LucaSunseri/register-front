@@ -20,6 +20,7 @@
                             {{getUser.name}}
                         </button>
                         <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" @click.prevent="changeSignature">Modifica Firma</a></li>
                             <li><a class="dropdown-item" href="#" @click="logout">Logout</a></li>
                         </ul>
                     </div>
@@ -46,11 +47,16 @@ export default {
         }
     },
     methods: {
+        
         logout() {
             this.$store.dispatch('logout')
                 .then(() => this.$router.push('/login'))
                 .catch((error) => console.log(error))
             ;
+        },
+
+        changeSignature() {
+            this.$store.commit('setCheckSignature', false)
         }
     }
 };

@@ -5,7 +5,6 @@ import store from './store'
 
 import { SignaturePlugin } from '@syncfusion/ej2-vue-inputs';
 
-
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Attendance from '../views/Attendance.vue'
-import NewAttendance from '../views/NewAttendance.vue'
+import CreateAttendance from '../views/CreateAttendance.vue'
 import EditAttendace from '../views/EditAttendace.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> =[
   {
     path: '/attendance/create',
     name: 'create-attendance',
-    component: NewAttendance,
+    component: CreateAttendance,
     meta: { 
       requiresAuth: true,
       isLoggedInSkip: false  

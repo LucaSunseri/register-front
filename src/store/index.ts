@@ -10,6 +10,7 @@ export default createStore({
     attendances: null,
     attendance: {},
     activities: null,
+    allDeveloperUser: null,
     checkSignature: null,
   },
 
@@ -34,6 +35,10 @@ export default createStore({
 
     getActivities (state) {
       return state.activities;
+    },
+
+    getAllDeveloperUser (state) {
+      return state.allDeveloperUser;
     },
 
     getCheckSignature (state) {
@@ -61,6 +66,10 @@ export default createStore({
       state.activities = activities;
     },
 
+    setAllDeveloperUser(state, allDeveloperUser) {
+      state.allDeveloperUser = allDeveloperUser;
+    },
+
     setCheckSignature(state, checkSignature) {
       state.checkSignature = checkSignature;
     },
@@ -69,7 +78,7 @@ export default createStore({
 
   actions: {
 
-    login({commit, dispatch}, payload) {
+    login({commit}, payload) {
       return axios
       .post(API_URL + 'login', payload)
       .then(function (response) {
@@ -111,12 +120,14 @@ export default createStore({
 
     getAttendance({commit, getters}, payload) {
       let api_url = API_URL + 'attendance/index';
-      if(payload?.month && payload?.year) {
-        api_url = API_URL + `attendance/index/?month=${payload.month}&&year=${payload.year}`;
-      } else if(payload?.month) {
-        api_url = API_URL + `attendance/index/?month=${payload.month}`;
-      } else if(payload?.year) {
-        api_url = API_URL + `attendance/index/?year=${payload.year}`;
+      if(payload) {
+        const arrayQuery = [];
+        for (const [key, value] of Object.entries(payload)) {
+          if(value) {
+            arrayQuery.push(key + '=' + value);
+          }
+        }
+        api_url = api_url + '?' + arrayQuery.join('&');        
       }
       axios
       .get( api_url, {
@@ -125,8 +136,6 @@ export default createStore({
         }
       })
       .then(function (response) {
-        console.log(response.data.data);
-        
         commit('setAttendances', response.data.data);
       })
       .catch(function (error) {
@@ -188,7 +197,22 @@ export default createStore({
         commit('setActivities', response.data);
       })
       .catch(function (error) {
-        console.log(error);
+        return Promise.reject(error);
+      });
+    },
+
+    getAllDeveloperUser({ getters, commit }) {
+      axios
+      .get( API_URL + 'user/developer', {
+        headers : {
+          'Authorization': `Bearer ${getters.getUser.token}`
+        }
+      })
+      .then(function (response) {
+        commit('setAllDeveloperUser', response.data);
+      })
+      .catch(function (error) {
+        return Promise.reject(error);
       });
     },
 

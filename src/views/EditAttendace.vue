@@ -1,70 +1,103 @@
 <template>
     <div class="container">
-
-        <h1>Modifica Presenza</h1>
-
         <form @submit.prevent="editAttendance">
+            <div class="ls-form">
 
-            <div class="container">
-                <div class="row mb-3">
-                    <div class="col">
+                <h2 class="mt-3 mb-4">Modifica presenza</h2>
+                <div v-if="errorA" class="alert alert-danger" role="alert">
+                    {{errorA}}
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <label for="date" class="form-label">Data</label>
+                    </div>
+                    <div class="col-6">
                         <input
                             v-model="getAttendance.date"
+                            id="date"
                             type="date"
                             class="form-control"
-                        />
+                        />   
                     </div>
-                    <div class="col">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="time_start_morning" class="form-label">Ora inizio Mattina</label>
+                    </div>
+                    <div class="col-6">
                         <input
                             v-model="getAttendance.time_start_morning"
+                            id="time_start_morning"
                             type="time"
                             class="form-control"
                             placeholder="Inizio Mattina"
-                        />
+                        />  
                     </div>
-                    <div class="col">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="time_end_morning" class="form-label">Ora fine Mattina</label>
+                    </div>
+                    <div class="col-6">
                         <input
                             v-model="getAttendance.time_end_morning"
+                            id="time_end_morning"
                             type="time"
                             class="form-control"
                             placeholder="Fine Mattina"
                         />
                     </div>
-                    <div class="col">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="time_start_afternoon" class="form-label">Ora inizio Pomeriggio</label>
+                    </div>
+                    <div class="col-6">
                         <input
                             v-model="getAttendance.time_start_afternoon"
+                            id="time_start_afternoon"
                             type="time"
                             class="form-control"
                             placeholder="Inizio Pomeriggio"
                         />
                     </div>
-                    <div class="col">
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="time_end_afternoon" class="form-label">Ora fine Pomeriggio</label>
+                    </div>
+                    <div class="col-6">
                         <input
                             v-model="getAttendance.time_end_afternoon"
+                            id="time_end_afternoon"
                             type="time"
                             class="form-control"
                             placeholder="Fine Pomeriggio"
                         />
                     </div>
                 </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col">
-                    <select class="form-select" aria-label="Default select example" v-model="getAttendance.activity_id">
-                        <option v-for="activity in getActivities" :key="activity.id" :value="activity.id">{{activity.type}}</option>
-                    </select>
+                <div class="row">
+                    <div class="col-6">
+                        <label for="activity_id" class="form-label">Seleziona attività</label>
+                    </div>
+                    <div class="col-6">
+                        <select id="activity_id" class="form-select" v-model="getAttendance.activity_id">
+                            <option v-for="activity in getActivities" :key="activity.id" :value="activity.id">{{activity.type}}</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div class="text-end">
+                    <button class="btn btn-primary text-end" type="submit">
+                        Modifica Presenza
+                    </button>    
+                </div>
+
             </div>
+        </form> 
 
-
-            <button class="w-20 btn btn-lg btn-primary" type="submit">
-                Submit
-            </button>
-        </form>
-            
-    </div>
-  
+    </div>  
 </template>
 
 <script>
@@ -76,6 +109,7 @@ export default {
     data() {
         return {
             id: this.$route.params.id,
+            errorA: null
         };
     },
     setup () {
@@ -102,7 +136,7 @@ export default {
             };
             this.$store.dispatch('editAttendance', [this.id, payload])
                 .then(() => this.$router.push('/attendance'))
-                .catch((error) => console.log(error));
+                .catch((error) => this.errorA = error.response.data);
         },
     },
 
@@ -110,5 +144,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.ls-form {
+    width: 70%;
+    margin: 0 auto;
+    padding: 10px;
+    .row {
+        margin: 15px 0;
+    }
+}
 </style>

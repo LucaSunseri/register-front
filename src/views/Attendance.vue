@@ -18,7 +18,7 @@
                         </select>    
                     </div>
                     <div v-if="checkRole()" class="col">
-                        <input type="text" class="form-control" placeholder="Nome o Cognome" aria-label="name" v-model="searchUser" @keyup.enter="filterAttendace">    
+                        <input type="text" class="form-control" placeholder="Filtra Utente" aria-label="name" v-model="searchUser" @keyup.enter="filterAttendace">    
                     </div>
                     <div class="col-2">
                         <button type="button" class="btn btn-outline-info" @click="filterAttendace">Filtra</button>
@@ -42,8 +42,13 @@
 
         </div>
 
+        <div v-if="getIsLoading" class="d-flex justify-content-center mt-5">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
 
-        <table class="table table-striped">
+        <table v-else class="table table-striped">
             <thead>
                 <tr>
                     <th v-if="checkRole()" scope="col">Cognome</th>
@@ -120,6 +125,7 @@ export default {
         return {
             getAttendances: computed(() => store.getters.getAttendances),
             getUser: computed(() => store.getters.getUser),
+            getIsLoading: computed(() => store.getters.getIsLoading),
         }
     },
     mounted() {
@@ -172,5 +178,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

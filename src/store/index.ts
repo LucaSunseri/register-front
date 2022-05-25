@@ -12,6 +12,7 @@ export default createStore({
     activities: null,
     allDeveloperUser: null,
     checkSignature: null,
+    isLoading: true,
   },
 
   getters: {
@@ -44,6 +45,10 @@ export default createStore({
     getCheckSignature (state) {
       return state.checkSignature;
     },
+
+    getIsLoading (state) {
+      return state.isLoading;
+    }
   
   },
 
@@ -73,6 +78,10 @@ export default createStore({
     setCheckSignature(state, checkSignature) {
       state.checkSignature = checkSignature;
     },
+
+    setIsLoading(state, isLoading) {
+      state.isLoading = isLoading;
+    }
 
 	},
 
@@ -119,6 +128,7 @@ export default createStore({
     },
 
     getAttendance({commit, getters}, payload) {
+      commit('setIsLoading', true);
       let api_url = API_URL + 'attendance/index';
       if(payload) {
         const arrayQuery = [];
@@ -137,6 +147,7 @@ export default createStore({
       })
       .then(function (response) {
         commit('setAttendances', response.data.data);
+        commit('setIsLoading', false);
       })
       .catch(function (error) {
         console.log(error);

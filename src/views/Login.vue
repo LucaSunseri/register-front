@@ -1,26 +1,59 @@
 <template>
     <div class="ls-box">
-        <form class="login" @submit.prevent="authClient">
-            <input 
-                v-model="email"
-                type="email"
-                placeholder="Email"
-                required
-            >
-            <input 
-                v-model="password"
-                type="password"
-                placeholder="Password"
-                required
-            >
-            <button>Login</button>
-        </form>
+        <div class="container">
+            <div class="ls-box__container">
+                <div class="row">
+                    <div class="col-6 d-none d-md-block">
+                        <div class="ls-box-image">
+                            <img
+                                src="https://colorlib.com/etc/regform/colorlib-regform-7/images/signin-image.jpg"
+                                alt="Sedia e PC"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="ls-box-content">
+                            <h2 class="mb-5">Entra</h2>
+                            <form class="ls-form" @submit.prevent="authClient">
+                                <div class="ls-box-input">
+                                    <i class="fa-solid fa-envelope"></i>
+                                    <input
+                                        v-model="email"
+                                        id="email"
+                                        type="email"
+                                        placeholder="Email"
+                                        required
+                                    />
+                                </div>
+                                <div class="ls-box-input">
+                                    <i class="fa-solid fa-lock"></i>
+                                    <input
+                                        v-model="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        required
+                                    />
+                                </div>
+                                <div class="ls-botton-box mt-5">
+                                    <div
+                                        class="ls-button"
+                                        @click="authClient()"
+                                    >
+                                        Entra
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { useStore } from "vuex";
-import { computed } from '@vue/runtime-core';
+import { computed } from "@vue/runtime-core";
 
 export default {
     name: "Login",
@@ -30,154 +63,105 @@ export default {
             password: "",
         };
     },
-    setup () {
+    setup() {
         const store = useStore();
         return {
             getUser: computed(() => store.getters.getUser),
-        }
+        };
     },
     mounted() {},
     methods: {
         authClient() {
             let payload = {
-            email: this.email,
-            password: this.password,
-            }
-            this.$store.dispatch('login', payload)
-                .then(() => this.$router.push({ name: "home"}))
-                .catch((error) => console.log(error))
-            ;
+                email: this.email,
+                password: this.password,
+            };
+            this.$store
+                .dispatch("login", payload)
+                .then(() => this.$router.push({ name: "home" }))
+                .catch((error) => console.log(error));
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .ls-box {
-    height: 100vh;
     width: 100%;
-    background-color: #f45b69;
-    font-family: "Asap", sans-serif;
+    height: 100%;
+    background-color: #f8f8f8;
+    overflow: auto;
+    .container {
+        height: 100%;
+    }
+    .ls-box__container {
+        width: 60%;
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .row {
+            background-color: white;
+            border-radius: 25px;
+            padding: 75px 0;
+            margin: 25px 0;
+            .ls-box-content {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding-left: 25px;
+            }
+            .ls-box-image {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                img {
+                    width: 80%;
+                }
+            }
+            .ls-form {
+                width: 100%;
+                padding-right: 25px;
+                .ls-box-input {
+                    display: flex;
+                    align-items: center;
+                    border-bottom: 1px solid #999;
+                    margin-bottom: 25px;
+                    input {
+                        margin-left: 15px;
+                        width: 100%;
+                        border: none;
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                }
+                .ls-button {
+                    display: inline-block;
+                    padding: 15px 39px;
+                    border-radius: 5px;
+                    background-color: #6dabe4;
+                    color: #fff;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: #4292dc;
+                    }
+                }
+            }
+        }
+    }
 }
 
-.login {
-  overflow: hidden;
-  background-color: white;
-  padding: 40px 30px 30px 30px;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 400px;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  -webkit-transition: -webkit-transform 300ms, box-shadow 300ms;
-  -moz-transition: -moz-transform 300ms, box-shadow 300ms;
-  transition: transform 300ms, box-shadow 300ms;
-  box-shadow: 5px 10px 10px rgba(2, 128, 144, 0.2);
+input::-webkit-input-placeholder {
+    color: #999;
 }
-.login::before, .login::after {
-  content: "";
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  border-top-left-radius: 40%;
-  border-top-right-radius: 45%;
-  border-bottom-left-radius: 35%;
-  border-bottom-right-radius: 40%;
-  z-index: -1;
+input:focus::-webkit-input-placeholder {
+    color: black;
 }
-.login::before {
-  left: 40%;
-  bottom: -130%;
-  background-color: rgba(69, 105, 144, 0.15);
-  -webkit-animation: wawes 6s infinite linear;
-  -moz-animation: wawes 6s infinite linear;
-  animation: wawes 6s infinite linear;
-}
-.login::after {
-  left: 35%;
-  bottom: -125%;
-  background-color: rgba(2, 128, 144, 0.2);
-  -webkit-animation: wawes 7s infinite;
-  -moz-animation: wawes 7s infinite;
-  animation: wawes 7s infinite;
-}
-.login > input {
-  font-family: "Asap", sans-serif;
-  display: block;
-  border-radius: 5px;
-  font-size: 16px;
-  background: white;
-  width: 100%;
-  border: 0;
-  padding: 10px 10px;
-  margin: 15px -10px;
-}
-.login > button {
-  font-family: "Asap", sans-serif;
-  cursor: pointer;
-  color: #fff;
-  font-size: 16px;
-  text-transform: uppercase;
-  width: 80px;
-  border: 0;
-  padding: 10px 0;
-  margin-top: 10px;
-  margin-left: -5px;
-  border-radius: 5px;
-  background-color: #f45b69;
-  -webkit-transition: background-color 300ms;
-  -moz-transition: background-color 300ms;
-  transition: background-color 300ms;
-}
-.login > button:hover {
-  background-color: #f24353;
-}
-
-@-webkit-keyframes wawes {
-  from {
-    -webkit-transform: rotate(0);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-@-moz-keyframes wawes {
-  from {
-    -moz-transform: rotate(0);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
-@keyframes wawes {
-  from {
-    -webkit-transform: rotate(0);
-    -moz-transform: rotate(0);
-    -ms-transform: rotate(0);
-    -o-transform: rotate(0);
-    transform: rotate(0);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.6);
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  font-size: 12px;
-}
-
 </style>
